@@ -1,0 +1,26 @@
+[Unit]
+Description=Cubic Doggo Robot Bringup
+After=network-online.target time-sync.target
+Wants=network-online.target time-sync.target
+
+[Service]
+Type=simple
+User=cubicgoogboi
+ExecStartPre=/bin/bash -c "until [ -e /dev/ttyACM0 ]; do sleep 1; done"
+ExecStart=/home/cubicgoogboi/Documents/CubicDoggo_14A/start_robot.sh
+KillMode=control-group
+# Restart=no
+Restart=on-failure
+RestartSec=10
+
+Nice=-10
+CPUSchedulingPolicy=fifo
+CPUSchedulingPriority=90
+LimitRTPRIO=95
+LimitMEMLOCK=infinity
+
+[Install]
+WantedBy=multi-user.target
+
+
+
