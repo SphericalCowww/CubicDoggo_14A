@@ -5,18 +5,20 @@ Cubic Doggo 14A Googboi is developed from [Cubic Doggo 07B Wouf](https://github.
 
 ### Calibration
 
-Plug in the device:
+ The servo IDs are 6-1 from top to bottom. Remember to always put on the PLA holder for servo 5 and connect both wires before any other part, as the wires will otherwise be extremely difficult to access afterwards. Then construct the arms.
+
+Plug the driver board into the Raspberry Pi:
 
     dmesg | tail -30
     ls -l /dev/ttyACM*                      # or whatever connection is found
     sudo usermod -aG dialout $USER
     sudo reboot
 
-Then install,
+Install,
 
     sudo apt install python3.12-venv libevdev-dev ffmpeg
 
-Then set up the Python environment,
+Set up the Python environment to install [LeRobot](https://github.com/huggingface/lerobot),
 
     cd CubicDoggo_14A/
     cd ..
@@ -26,8 +28,22 @@ Then set up the Python environment,
     git clone https://github.com/huggingface/lerobot.git
     cd lerobot
     pip install -e .
+    pip install -e ".[feetech]"
+
+Follow the calibration steps for the follower (see also [YouTube](https://www.youtube.com/watch?v=Nhfda8h7e2I)),
+
+    # plug in the driver board
+    lerobot-find-port
+    # unplug the driver board
+    ## The port of this MotorsBus is '/dev/ttyACM0'
+    # plug in the driver board
+    ls -l /dev/serial/by-id/
+    ## ... usb-1a86_USB_Single_Serial_5C93152513-if00 -> ../../ttyACM0
+    lerobot-setup-motors --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00
+    # Connecting the servos from top to bottom independently to the driver board one-by-one, following the instructions
     
 
+Follow the same steps for the leader using ``--robot.type=so101_follower``
 
 ## Running servos for the legs
 
@@ -74,6 +90,10 @@ To test 2 servos with 2 controllers, or 3 servos daisy-chained, redo the connect
 
 
 ## References:
+
+- Trushant Adeshara, SO101 Arms: Calibration and Motor Configuration
+ (<a href="https://www.youtube.com/watch?v=Nhfda8h7e2I">YouTube</a>)
+
 
 ## Acknowledgements
 
