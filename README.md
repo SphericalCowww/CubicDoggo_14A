@@ -98,11 +98,13 @@ To test 2 servos with 2 controllers, or 3 servos daisy-chained, redo the connect
 
 - Trushant Adeshara, SO101 Arms: Calibration and Motor Configuration
  (<a href="https://www.youtube.com/watch?v=Nhfda8h7e2I">YouTube</a>)
-
+- TheRobotStudio, SO-101 STL files, (<a href="https://github.com/TheRobotStudio/SO-ARM100/tree/main/STL/SO101/Individual">GitHub</a>)
 
 ## Acknowledgements
 
-- SO-101 ROS2 Jazzy control forked from adoodevv: https://github.com/adoodevv/so101_ros2, using the [BSD-3-Clause license](https://github.com/adoodevv/so101_ros2/blob/main/LICENSE).
-- Libraries and some examples taken from Waveshare: https://www.waveshare.com/wiki/Bus_Servo_Adapter_(A). The license is not defined.
+- SO-101 arm hardware kit purchased from Waveshare. Original hardware design by TheRobotStudio (<a href="https://github.com/TheRobotStudio/SO-ARM100">GitHub</a>) under [Apache-2.0 license](https://github.com/TheRobotStudio/SO-ARM100/blob/main/LICENSE)
+- SO-101 arm software package follows LeRobot [GitHub](https://github.com/huggingface/lerobot) under [Apache-2.0 license](https://github.com/huggingface/lerobot/blob/main/LICENSE)
+- SO-101 ROS2 Jazzy control forked from adoodevv [GitHub](https://github.com/adoodevv/so101_ros2) under [BSD-3-Clause license](https://github.com/adoodevv/so101_ros2/blob/main/LICENSE)
+- Libraries and some examples borrowed from Waveshare: https://www.waveshare.com/wiki/Bus_Servo_Adapter_(A). The license is not specified. For reference only
 
 
