@@ -7,7 +7,7 @@ Cubic Doggo 14A Googboi is developed from [Cubic Doggo 07B Wouf](https://github.
 
 Watch out that the follower uses the ST servos, while the leader uses the SE servo.
 
-The servo IDs are 6-1 from top to bottom. Remember to always put on the PLA holder for servo 5 and connect both wires before any other part, as the wires will otherwise be extremely difficult to access afterwards. Then construct the arms.
+The servo IDs are 6-1 from top to bottom. Remember to always put on the PLA holder for servo 5 and connect both wires before any other part, as the wires will otherwise be extremely difficult to access afterwards. Then install the arms following [HuggingFace](https://huggingface.co/docs/lerobot/en/so101).
 
 Plug the driver board into the Raspberry Pi:
 
