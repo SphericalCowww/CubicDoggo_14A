@@ -1,7 +1,35 @@
 # CubicDoggo 14A: Homemade 12-DOF 4-Legged Robot Recipe with 6-DOF Arm
 Cubic Doggo 14A Googboi is developed from [Cubic Doggo 07B Wouf](https://github.com/SphericalCowww/CubicDoggo_07B) incorporating an [SO-101 arm](https://huggingface.co/docs/lerobot/en/so101). The robot is built towards the [Tag of Flag](https://github.com/SphericalCowww/tag_of_flag) game.
 
-## Running servos
+## Running SO-101 arms
+
+### Calibration
+
+Plug in the device:
+
+    dmesg | tail -30
+    ls -l /dev/ttyACM*                      # or whatever connection is found
+    sudo usermod -aG dialout $USER
+    sudo reboot
+
+Then install,
+
+    sudo apt install python3.12-venv libevdev-dev ffmpeg
+
+Then set up the Python environment,
+
+    cd CubicDoggo_14A/
+    cd ..
+    python3 -m venv CubicDoggo_14A_env
+    source CubicDoggo_14A_env/bin/activate
+    pip install --upgrade pip jinja2 pyyaml typeguard setuptools wheel
+    git clone https://github.com/huggingface/lerobot.git
+    cd lerobot
+    pip install -e .
+    
+
+
+## Running servos for the legs
 
 ### Initializing servos in ROS with STServo library
 
@@ -40,6 +68,10 @@ To test 2 servos with 2 controllers, or 3 servos daisy-chained, redo the connect
 **NOTE:** Record the ``pos_offset`` for each servo independently such that each of their default position is finely aligned.
 
 **NOTE:** ``sts_wb.writeByte``requires unlocking the EEPROM; do NOT do this firmware change too frequently, otherwise it can cause corruption.
+
+
+
+
 
 ## References:
 
