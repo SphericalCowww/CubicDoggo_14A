@@ -5,7 +5,9 @@ Cubic Doggo 14A Googboi is developed from [Cubic Doggo 07B Wouf](https://github.
 
 ### Calibration
 
- The servo IDs are 6-1 from top to bottom. Remember to always put on the PLA holder for servo 5 and connect both wires before any other part, as the wires will otherwise be extremely difficult to access afterwards. Then construct the arms.
+Watch out that the follower uses the ST servos, while the leader uses the SE servo.
+
+The servo IDs are 6-1 from top to bottom. Remember to always put on the PLA holder for servo 5 and connect both wires before any other part, as the wires will otherwise be extremely difficult to access afterwards. Then construct the arms.
 
 Plug the driver board into the Raspberry Pi:
 
@@ -41,9 +43,12 @@ Follow the calibration steps for the follower (see also [YouTube](https://www.yo
     ## ... usb-1a86_USB_Single_Serial_5C93152513-if00 -> ../../ttyACM0
     lerobot-setup-motors --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00
     # Connecting the servos from top to bottom independently to the driver board one-by-one, following the instructions
-    
+    ## ... 'shoulder_pan' motor id set to 1
+    # After completion, connect all servos in a daisy chain 
+    lerobot-calibrate --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 --robot.id=cubicgoogboi_follower
 
-Follow the same steps for the leader using ``--robot.type=so101_follower``
+
+Follow the same steps for the leader using ``--robot.type=so101_follower``.
 
 ## Running servos for the legs
 
