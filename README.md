@@ -40,15 +40,22 @@ Follow the calibration steps for the follower (see also [YouTube](https://www.yo
     ## The port of this MotorsBus is '/dev/ttyACM0'
     # plug in the driver board
     ls -l /dev/serial/by-id/
-    ## ... usb-1a86_USB_Single_Serial_5C93152513-if00 -> ../../ttyACM0
-    lerobot-setup-motors --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00
+    ## ... usb-1a86_USB_Single_Serial_5C93149822-if00 -> ../../ttyACM0
+    lerobot-setup-motors --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93149822-if00
     # Connecting the servos from top to bottom independently to the driver board one-by-one, following the instructions
     ## ... 'shoulder_pan' motor id set to 1
     # After completion, connect all servos in a daisy chain 
-    lerobot-calibrate --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 --robot.id=cubicgoogboi_follower
+    lerobot-calibrate --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93149822-if00 --robot.id=cubicgoogboi_follower
+    # Follow the instructions
 
+For the leader:
 
-Follow the same steps for the leader using ``--robot.type=so101_follower``.
+    ls -l /dev/serial/by-id/
+    ## ... usb-1a86_USB_Single_Serial_5C93152513-if00 -> ../../ttyACM0
+    lerobot-setup-motors --teleop.type=so101_leader --teleop.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00
+    # ...
+    lerobot-calibrate --teleop.type=so101_leader --teleop.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 --teleop.id=cubicgoogboi_leader
+    
 
 ## Running servos for the legs
 
