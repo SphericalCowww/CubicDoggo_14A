@@ -4,13 +4,13 @@ controller_manager:
     update_rate: 100  # Hz
 
     # Replace the 4 individual ones with this:
-    all_legs_controller:
+    /cubic_doggo/all_legs_controller:
       type: joint_trajectory_controller/JointTrajectoryController
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-all_legs_controller:
+/cubic_doggo/all_legs_controller:
   ros__parameters:
     joints:
       - servo1_servo1_padding_FL
