@@ -88,6 +88,54 @@ Then launch the arms,
     # For teleop
     ros2 launch so101_bringup so101_teleop.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 use_rviz:=false 
 
+
+### Running SO-101 on ROS with leader and follower on separate devices
+
+On both devices, add,
+    
+    vim ~/.bashrc
+    # export ROS_DOMAIN_ID=141
+    # export ROS_LOCALHOST_ONLY=0
+    source ~/.bashrc
+
+Testing the discovery, 
+
+    # on leader device
+    ros2 run demo_nodes_cpp talker
+    # on follower device
+    ros2 run demo_nodes_cpp listener
+
+To set it up on Bluetooth,
+
+    sudo apt install bluez bluez-tools
+    sudo systemctl enable --now bluetooth
+    bluetoothctl show
+
+To start pairing,
+
+    bluetoothctl
+    power on
+    agent on
+    default-agent
+    discoverable on
+    pairable on
+
+Then, on the leader device only, still in ``bluetoothctl``,
+    
+    scan on
+    # [bluetooth]# [NEW] Device XX:XX:XX:XX:XX:XX cubicgoogboi-desktop
+    pair XX:XX:XX:XX:XX:XX
+    # yes
+    trust XX:XX:XX:XX:XX:XX
+    exit
+
+For debugging,
+
+    bluetoothctl info XX:XX:XX:XX:XX:XX
+    sudo journalctl -u bluetooth -n 80 --no-pager
+
+
+
 ## Running servos for the legs
 
 ### Initializing servos in ROS with STServo library
