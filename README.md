@@ -105,6 +105,13 @@ Test discovery, as long as they are on the same network,
     # on follower device
     ros2 run demo_nodes_cpp listener
 
+On both devices,
+
+    cd CubicDoggo_14A
+    cp so101_ros2/src/so101_bringup/launch/so101_real_moveit_2devices.launch.py ../so101_ros2/src/so101_bringup/launch/so101_real_moveit_2devices.launch.py
+    cd ../so101_ros2
+    colcon build
+
 Then, to run the teleoperation,
 
     # on leader device
