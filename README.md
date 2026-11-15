@@ -40,12 +40,12 @@ Follow the calibration steps for the follower (see also [YouTube](https://www.yo
     ## The port of this MotorsBus is '/dev/ttyACM0'
     # plug in the driver board
     ls -l /dev/serial/by-id/
-    ## ... usb-1a86_USB_Single_Serial_5C93149822-if00 -> ../../ttyACM0
-    lerobot-setup-motors --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93149822-if00
+    ## ... usb-1a86_USB_Single_Serial_5B8E112477-if00 -> ../../ttyACM0
+    lerobot-setup-motors --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00
     # Connecting the servos from top to bottom independently to the driver board one-by-one, following the instructions
     ## ... 'shoulder_pan' motor id set to 1
     # After completion, connect all servos in a daisy chain 
-    lerobot-calibrate --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93149822-if00 --robot.id=my_follower
+    lerobot-calibrate --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 --robot.id=my_follower
     # Follow the instructions
 
 For the leader, note to use a 12V power supply for calibration (5V is sufficient for normal operation howerver),
@@ -76,17 +76,17 @@ Once everything is done,
 
 Connect both driver boards and test out the calibration files, 
 
-    ros2 run so101_hardware so101_hardware_check --port /dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93149822-if00 --calibration ~/.cache/huggingface/lerobot/calibration/robots/so_follower/my_follower.json
+    ros2 run so101_hardware so101_hardware_check --port /dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 --calibration ~/.cache/huggingface/lerobot/calibration/robots/so_follower/my_follower.json
     ros2 run so101_hardware so101_hardware_check --port /dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 --calibration ~/.cache/huggingface/lerobot/calibration/teleoperators/so_leader/my_leader.json
 
 Then launch the arms,
 
     # For no torque with rViz
-    ros2 launch so101_bringup so101_real_moveit.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93149822-if00 read_only:=true
+    ros2 launch so101_bringup so101_real_moveit.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 read_only:=true
     # For powered without rViz
-    ros2 launch so101_bringup so101_real_moveit.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93149822-if00 use_rviz:=false 
+    ros2 launch so101_bringup so101_real_moveit.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 use_rviz:=false 
     # For teleop
-    ros2 launch so101_bringup so101_teleop.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93149822-if00 leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 use_rviz:=false 
+    ros2 launch so101_bringup so101_teleop.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 use_rviz:=false 
 
 ## Running servos for the legs
 
