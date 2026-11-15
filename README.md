@@ -98,14 +98,22 @@ On both devices, add,
     # export ROS_LOCALHOST_ONLY=0
     source ~/.bashrc
 
-Testing the discovery, 
+Test discovery, as long as they are on the same network,
 
     # on leader device
     ros2 run demo_nodes_cpp talker
     # on follower device
     ros2 run demo_nodes_cpp listener
 
-To set it up on Bluetooth,
+Then, to run the teleoperation,
+
+    # on leader device
+    ros2 launch so101_bringup so101_real_moveit_2devices.launch.py leader_only:=true leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 leader_id:=my_leader use_rviz:=false 
+    # on follower device
+    ros2 node list
+    ros2 launch so101_bringup so101_real_moveit_2devices.launch.py teleop:=true port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 follower_id:=my_follower use_rviz:=false 
+
+#### Bluetooth setup
 
     sudo apt install bluez bluez-tools
     sudo systemctl enable --now bluetooth
@@ -133,8 +141,6 @@ For debugging,
 
     bluetoothctl info XX:XX:XX:XX:XX:XX
     sudo journalctl -u bluetooth -n 80 --no-pager
-
-
 
 ## Running servos for the legs
 
@@ -175,10 +181,6 @@ To test 2 servos with 2 controllers, or 3 servos daisy-chained, redo the connect
 **NOTE:** Record the ``pos_offset`` for each servo independently such that each of their default position is finely aligned.
 
 **NOTE:** ``sts_wb.writeByte``requires unlocking the EEPROM; do NOT do this firmware change too frequently, otherwise it can cause corruption.
-
-
-
-
 
 ## References:
 
