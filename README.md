@@ -5,7 +5,7 @@ Cubic Doggo 14A Googboi is developed from [Cubic Doggo 07B Wouf](https://github.
 
 ### Initializing SO-101 with LeRobot services
 
-Note that for this setup, the leader arms are assumed to use virtual servos, such as STS3215-C066 (or WaveShare ST3215 (SE)) that have 7.2 V grading (powered by 5 V supply). 
+Note that for this setup, the leader arms are assumed to use virtual servos, such as STS3215-C066 (or WaveShare ST3215 (SE)) that have 7.2 V grading (powered by a 5 V supply). 
 
 The servo IDs are 6-1 from top to bottom. Remember to always put on the PLA holder for servo 5 and connect both wires before any other part, as the wires will otherwise be extremely difficult to access afterwards. Then install the arms following [HuggingFace](https://huggingface.co/docs/lerobot/en/so101).
 
@@ -48,7 +48,7 @@ Follow the calibration steps for the follower (see also [YouTube](https://www.yo
     lerobot-calibrate --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93149822-if00 --robot.id=my_follower
     # Follow the instructions
 
-For the leader:
+For the leader, note to use a 12V power supply for calibration (5V is sufficient for normal operation howerver),
 
     ls -l /dev/serial/by-id/
     ## ... usb-1a86_USB_Single_Serial_5C93152513-if00 -> ../../ttyACM0
