@@ -11,7 +11,7 @@ The servo IDs are 6-1 from top to bottom. Remember to always put on the PLA hold
 
 Plug the driver board into the Raspberry Pi:
 
-    dmesg | tail -30
+    sudo dmesg | tail -30
     ls -l /dev/ttyACM*                      # or whatever connection is found
     sudo usermod -aG dialout $USER
     sudo reboot
