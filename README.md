@@ -62,16 +62,35 @@ Once everything is done,
 
 ### Running SO-101 on ROS
 
+Note that although it is not needed in this setup, ``so101_ros2`` does require Gazebo, so don't forget to install it,
+
     cd CubicDoggo_14A/
     cd ..
+    source CubicDoggo_14A_env/bin/activate
+    export CMAKE_PREFIX_PATH="/opt/ros/jazzy/opt/gz_msgs_vendor:$CMAKE_PREFIX_PATH"
+    export CMAKE_PREFIX_PATH="/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:$CMAKE_PREFIX_PATH"
+    pip install catkin_pkg 
     mkdir so101_ros2
     cd so101_ros2
     git clone https://github.com/adoodevv/so101_ros2.git
     mv so101_ros2 src
+    cp ../CubicDoggo_14A/so101_ros2/src/so101_bringup/launch/so101_real_moveit_2devices.launch.py src/so101_bringup/launch/
     sudo rosdep init
     rosdep update
     rosdep install --from-paths src --ignore-src -r -y
     colcon build --symlink-install
+    source install/setup.bash
+
+The following is for debugging on a Raspberry Pi 4 with 1 Gb of RAM
+
+    export CMAKE_PREFIX_PATH="/opt/ros/jazzy/opt/gz_msgs_vendor:$CMAKE_PREFIX_PATH"
+    export CMAKE_PREFIX_PATH="/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:$CMAKE_PREFIX_PATH"
+    sudo fallocate -l 4G /swapfile
+    sudo chmod 600 /swapfile
+    sudo mkswap /swapfile
+    sudo swapon /swapfile
+    free -h                 # check if 4 Gb more RAM
+    CMAKE_BUILD_PARALLEL_LEVEL=1 MAKEFLAGS="-j1" colcon build --symlink-install --executor sequential --event-handlers console_direct+ status-
     source install/setup.bash
 
 Connect both driver boards and test out the calibration files, 
@@ -108,7 +127,7 @@ Test discovery, as long as they are on the same network,
 On both devices,
 
     cd CubicDoggo_14A
-    cp so101_ros2/src/so101_bringup/launch/so101_real_moveit_2devices.launch.py ../so101_ros2/src/so101_bringup/launch/so101_real_moveit_2devices.launch.py
+    cp ../CubicDoggo_14A/so101_ros2/src/so101_bringup/launch/so101_real_moveit_2devices.launch.py ../so101_ros2/src/so101_bringup/launch/so101_real_moveit_2devices.launch.py
     cd ../so101_ros2
     colcon build
 
