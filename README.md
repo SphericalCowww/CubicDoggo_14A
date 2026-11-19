@@ -119,6 +119,7 @@ On both devices, add,
 
 Test discovery, as long as they are on the same network,
 
+    sudo apt install ros-jazzy-demo-nodes-cpp
     # on leader device
     ros2 run demo_nodes_cpp talker
     # on follower device
@@ -139,9 +140,10 @@ Then, to run the teleoperation,
     ros2 node list
     ros2 launch so101_bringup so101_real_moveit_2devices.launch.py teleop:=true port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 follower_id:=my_follower use_rviz:=false 
 
-Check if the domain is properly followed:
+Check if the domain is properly followed; do either of the following while running the code:
 
     sudo cat /proc/$(pgrep -f '/joy/joy_node' | head -n 1)/environ | tr '\0' '\n' | grep -E 'ROS_DOMAIN_ID|ROS_AUTOMATIC_DISCOVERY_RANGE'
+    sudo cat /proc/$(pgrep -f '/so101_hardware/so101_leader' | head -n 1)/environ | tr '\0' '\n' | grep -E 'ROS_DOMAIN_ID|ROS_AUTOMATIC_DISCOVERY_RANGE'
 
 #### Bluetooth setup
 
