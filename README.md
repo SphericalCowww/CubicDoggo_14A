@@ -48,7 +48,7 @@ Follow the calibration steps for the follower (see also [YouTube](https://www.yo
     lerobot-calibrate --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 --robot.id=my_follower
     # Follow the instructions
 
-For the leader, note to use a 12V power supply for calibration (5V is sufficient for normal operation howerver),
+For the leader, while 5V is completely sufficient for operation, calibration sometimes needs higher voltage,
 
     ls -l /dev/serial/by-id/
     ## ... usb-1a86_USB_Single_Serial_5C93152513-if00 -> ../../ttyACM0
