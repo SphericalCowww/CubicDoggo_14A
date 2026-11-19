@@ -107,6 +107,11 @@ Then launch the arms,
     # For teleop
     ros2 launch so101_bringup so101_teleop.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 use_rviz:=false 
 
+Note that if the arm has trouble connecting all servos, try turning down the communication to 50 Hz,
+
+    vim src/so101_moveit_config/config/so101/ros2_controllers.yaml
+    # update_rate: 50
+    colcon build
 
 ### Running SO-101 on ROS with leader and follower on separate devices
 
