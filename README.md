@@ -151,11 +151,13 @@ Check if the domain is properly followed; do either of the following while runni
 
 ### Bluetooth setup
 
+On both devices,
+
     sudo apt install bluez bluez-tools network-manager
     sudo systemctl enable --now bluetooth
     bluetoothctl show
 
-To start pairing, on the follower device,
+To start pairing, on the leader device,
 
     bluetoothctl
     power on
@@ -165,7 +167,7 @@ To start pairing, on the follower device,
     pairable on
     # do not exit
 
-Then, on the leader device, 
+Then, on the follower device, 
 
     bluetoothctl
     power on
@@ -173,24 +175,25 @@ Then, on the leader device,
     default-agent
     scan on
     # Pair immediately after seeing
-    # [bluetooth]# [NEW] Device 88:A2:9E:C2:0B:A0 cubicgoogboi-desktop
-    pair 88:A2:9E:C2:0B:A0
+    # [bluetooth]# [NEW] Device 98:FE:54:75:C3:C9 cubicgoogboi_controller-desktop
+    pair 98:FE:54:75:C3:C9
     # yes
-    trust 88:A2:9E:C2:0B:A0
-    connect 88:A2:9E:C2:0B:A0
+    trust 98:FE:54:75:C3:C9
+    connect 98:FE:54:75:C3:C9
     # yes on the follower side
     exit                          # on both sides 
     # For debugging:
-    ## bluetoothctl info 88:A2:9E:C2:0B:A0                       
+    ## bluetoothctl info 98:FE:54:75:C3:C9                       
     ## sudo journalctl -u bluetooth -n 80 --no-pager   
 
-Then create a Bluetooth PAN connection on the follower side:
+Then create a Bluetooth PAN connection on the leader device as the server:
 
     nmcli --version
     ip -br addr
-    sudo nmcli connection add type bluetooth con-name cubicggoogboi-server ifname btnap0 bluetooth.type nap ipv4.method shared ipv6.method disabled
+    sudo nmcli connection add type bluetooth con-name cubicgoogboi-server ifname btnap0 bluetooth.type nap ipv4.method shared ipv6.method disabled
     sudo nmcli connection up cubicgoogboi-server
-    # sudo nmcli connection down cubicgoogboi-server                                  # if needed
+    # sudo nmcli connection down cubicgoogboi-server                               # if needed
+    # sudo nmcli connection delete cubicgoogboi-server                             # if needed
     # sudo systemctl restart NetworkManager                                        # if needed
     # nmcli device status
     ip -br addr
@@ -198,22 +201,23 @@ Then create a Bluetooth PAN connection on the follower side:
     # UUID: NAP                       (00001116-0000-1000-8000-00805f9b34fb)
     sudo bt-agent -c NoInputNoOutput                   # and keep the agent on
 
-Then create a Bluetooth PAN connection on the leader side:
+Then create a Bluetooth PAN connection on the follower device as the client:
 
     nmcli --version
     ip -br addr
-    sudo nmcli connection add type bluetooth con-name cubicgoogboi-client ifname "*" bluetooth.type panu bluetooth.bdaddr 88:A2:9E:C2:0B:A0 ipv4.method auto ipv6.method disabled
+    sudo nmcli connection add type bluetooth con-name cubicgoogboi-client ifname "*" bluetooth.type panu bluetooth.bdaddr 98:FE:54:75:C3:C9 ipv4.method auto ipv6.method disabled
     sudo nmcli connection up cubicgoogboi-client
     # sudo nmcli connection down cubicgoogboi-client                                  # if needed
-    # sudo systemctl restart NetworkManager                                        # if needed
+    # sudo nmcli connection delete cubicgoogboi-client                                # if needed
+    # sudo systemctl restart NetworkManager                                           # if needed
     # nmcli device status
     ip -br addr
     ping -c 4 10.42.0.1
     bluetoothctl show
-    bluetoothctl info 88:A2:9E:C2:0B:A0
-    sudo sdptool browse 88:A2:9E:C2:0B:A0 | grep -i -A 10 "Network Access"         # need to find some lines
+    bluetoothctl info 98:FE:54:75:C3:C9
+    sudo sdptool browse 98:FE:54:75:C3:C9 | grep -i -A 10 "Network Access"         # need to find some lines
 
-To automatically start the connection, on follower device:
+To automatically start the connection, on the leader device:
 
     sudo nmcli connection modify cubicgoogboi-server connection.autoconnect yes
     nmcli -f NAME,AUTOCONNECT connection show
@@ -229,6 +233,7 @@ To automatically start the connection, on follower device:
     ## ExecStart=/usr/bin/bt-agent -c NoInputNoOutput
     ## Restart=always
     ## RestartSec=3
+    ## TimeoutStopSec=5
     ## 
     ## [Install]
     ## WantedBy=multi-user.target
@@ -238,18 +243,18 @@ To automatically start the connection, on follower device:
     # systemctl status bluetooth-agent.service --no-pager    # for debugging
     # journalctl -u bluetooth-agent.service -f
 
-And on the leader device:
+And on the follower device:
 
-    sudo nmcli connection modify cubicgoogboi-client connection.autoconnect yes
+    sudo nmcli connection modify cubicgoogboi-client connection.autoconnect yes connection.autoconnect-retries 0
     nmcli -f NAME,AUTOCONNECT connection show
 
-To confirm connections, on the follower device:
+To confirm connections, on the leader device:
 
     nmcli device status
     ip -br addr | grep btnap0
     # sudo nmcli connection up cubicgoogboi-server          # if not up
 
-And on the leader device:
+And on the follower device:
 
     nmcli device status
     ip -br addr | grep bnep0
