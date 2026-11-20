@@ -1,5 +1,5 @@
 # CubicDoggo 14A: Homemade 12-DOF 4-Legged Robot Recipe with 6-DOF Arm
-Cubic Doggo 14A Googboi is developed from [Cubic Doggo 07B Wouf](https://github.com/SphericalCowww/CubicDoggo_07B), incorporating an [SO-101 arm](https://huggingface.co/docs/lerobot/en/so101). The robot is the simplest Cubic Doggo built for the [Tag of Flag](https://github.com/SphericalCowww/tag_of_flag) game.
+Cubic Doggo 14A Googboi is based on [Cubic Doggo 07B Wouf](https://github.com/SphericalCowww/CubicDoggo_07B), incorporating an [SO-101 arm](https://huggingface.co/docs/lerobot/en/so101). The robot is the simplest Cubic Doggo built for the [Tag of Flag](https://github.com/SphericalCowww/tag_of_flag) game.
 
 ## Running SO-101 arms
 
@@ -119,7 +119,6 @@ On both devices, add,
     
     vim ~/.bashrc
     # export ROS_DOMAIN_ID=141
-    # export ROS_LOCALHOST_ONLY=0
     source ~/.bashrc
 
 Test discovery, as long as they are on the same network,
@@ -160,9 +159,9 @@ Then create a Bluetooth PAN connection on the follower side:
 
     nmcli --version
     ip -br addr
-    sudo nmcli connection add type bluetooth con-name cubicgwouf-server ifname btnap0 bluetooth.type nap ipv4.method shared ipv6.method disabled
-    sudo nmcli connection up cubicwouf-server
-    # sudo nmcli connection down cubicwouf-server                                  # if needed
+    sudo nmcli connection add type bluetooth con-name cubicggoogboi-server ifname btnap0 bluetooth.type nap ipv4.method shared ipv6.method disabled
+    sudo nmcli connection up cubicgoogboi-server
+    # sudo nmcli connection down cubicgoogboi-server                                  # if needed
     # sudo systemctl restart NetworkManager                                        # if needed
     # nmcli device status
     ip -br addr
@@ -173,9 +172,9 @@ Then create a Bluetooth PAN connection on the leader side:
 
     nmcli --version
     ip -br addr
-    sudo nmcli connection add type bluetooth con-name cubicwouf-client ifname "*" bluetooth.type panu bluetooth.bdaddr 88:A2:9E:C2:0B:A0 ipv4.method auto ipv6.method disabled
-    sudo nmcli connection up cubicwouf-client
-    # sudo nmcli connection down cubicwouf-client                                  # if needed
+    sudo nmcli connection add type bluetooth con-name cubicgoogboi-client ifname "*" bluetooth.type panu bluetooth.bdaddr 88:A2:9E:C2:0B:A0 ipv4.method auto ipv6.method disabled
+    sudo nmcli connection up cubicgoogboi-client
+    # sudo nmcli connection down cubicgoogboi-client                                  # if needed
     # sudo systemctl restart NetworkManager                                        # if needed
     # nmcli device status
     ip -br addr
@@ -215,25 +214,25 @@ Then, on the leader device,
 
 To automatically start the connection, on follower device:
 
-    sudo nmcli connection modify cubicwouf-server connection.autoconnect yes
+    sudo nmcli connection modify cubicgoogboi-server connection.autoconnect yes
     nmcli -f NAME,AUTOCONNECT connection show
 
 And on the leader device:
 
-    sudo nmcli connection modify cubicwouf-client connection.autoconnect yes
+    sudo nmcli connection modify cubicgoogboi-client connection.autoconnect yes
     nmcli -f NAME,AUTOCONNECT connection show
 
 To confirm connections, on the follower device:
 
     nmcli device status
     ip -br addr | grep btnap0
-    # sudo nmcli connection up cubicwouf-server          # if not up
+    # sudo nmcli connection up cubicgoogboi-server          # if not up
 
 And on the leader device:
 
     nmcli device status
     ip -br addr | grep bnep0
-    # sudo nmcli connection up cubicwouf-client          # if not up
+    # sudo nmcli connection up cubicgoogboi-client          # if not up
     ping -c 4 10.42.0.1
 
 ## References:
