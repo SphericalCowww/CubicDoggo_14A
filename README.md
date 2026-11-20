@@ -261,6 +261,8 @@ And on the follower device:
     # sudo nmcli connection up cubicgoogboi-client          # if not up
     ping -c 4 10.42.0.1
 
+#### Always turn on the controller before the robot!
+
 ## References:
 
 - Trushant Adeshara, SO101 Arms: Calibration and Motor Configuration
