@@ -152,11 +152,39 @@ Check if the domain is properly followed; do either of the following while runni
 
 #### Bluetooth setup
 
-    sudo apt install bluez bluez-tools
+    sudo apt install bluez bluez-tools network-manager
     sudo systemctl enable --now bluetooth
     bluetoothctl show
+    
+Then create a Bluetooth PAN connection on the follower side:
 
-To start pairing,
+    nmcli --version
+    ip -br addr
+    sudo nmcli connection add type bluetooth con-name cubicgwouf-server ifname btnap0 bluetooth.type nap ipv4.method shared ipv6.method disabled
+    sudo nmcli connection up cubicwouf-server
+    # sudo nmcli connection down cubicwouf-server                                  # if needed
+    # sudo systemctl restart NetworkManager                                        # if needed
+    # nmcli device status
+    ip -br addr
+    bluetoothctl show | grep -i "NAP"
+    # UUID: NAP                       (00001116-0000-1000-8000-00805f9b34fb)
+
+Then create a Bluetooth PAN connection on the leader side:
+
+    nmcli --version
+    ip -br addr
+    sudo nmcli connection add type bluetooth con-name cubicwouf-client ifname "*" bluetooth.type panu bluetooth.bdaddr 88:A2:9E:C2:0B:A0 ipv4.method auto ipv6.method disabled
+    sudo nmcli connection up cubicwouf-client
+    # sudo nmcli connection down cubicwouf-client                                  # if needed
+    # sudo systemctl restart NetworkManager                                        # if needed
+    # nmcli device status
+    ip -br addr
+    ping -c 4 10.42.0.1
+    bluetoothctl show
+    bluetoothctl info 88:A2:9E:C2:0B:A0
+    sudo sdptool browse 88:A2:9E:C2:0B:A0 | grep -i -A 10 "Network Access"         # need to find some lines
+    
+To start pairing, on the follower device,
 
     bluetoothctl
     power on
@@ -164,21 +192,49 @@ To start pairing,
     default-agent
     discoverable on
     pairable on
+    # do not exit
 
-Then, on the leader device only, still in ``bluetoothctl``,
-    
+Then, on the leader device, 
+
+    bluetoothctl
+    power on
+    agent on
+    default-agent
     scan on
-    # [bluetooth]# [NEW] Device XX:XX:XX:XX:XX:XX cubicgoogboi-desktop
-    pair XX:XX:XX:XX:XX:XX
+    # Pair immediately after seeing
+    # [bluetooth]# [NEW] Device 88:A2:9E:C2:0B:A0 cubicgoogboi-desktop
+    pair 88:A2:9E:C2:0B:A0
     # yes
-    trust XX:XX:XX:XX:XX:XX
-    exit
+    trust 88:A2:9E:C2:0B:A0
+    connect 88:A2:9E:C2:0B:A0
+    # yes on the follower side
+    exit                          # on both sides 
+    # For debugging:
+    ## bluetoothctl info 88:A2:9E:C2:0B:A0                       
+    ## sudo journalctl -u bluetooth -n 80 --no-pager   
 
-For debugging,
+To automatically start the connection, on follower device:
 
-    bluetoothctl info XX:XX:XX:XX:XX:XX
-    sudo journalctl -u bluetooth -n 80 --no-pager
+    sudo nmcli connection modify cubicwouf-server connection.autoconnect yes
+    nmcli -f NAME,AUTOCONNECT connection show
 
+And on the leader device:
+
+    sudo nmcli connection modify cubicwouf-client connection.autoconnect yes
+    nmcli -f NAME,AUTOCONNECT connection show
+
+To confirm connections, on the follower device:
+
+    nmcli device status
+    ip -br addr | grep btnap0
+    # sudo nmcli connection up cubicwouf-server          # if not up
+
+And on the leader device:
+
+    nmcli device status
+    ip -br addr | grep bnep0
+    # sudo nmcli connection up cubicwouf-client          # if not up
+    ping -c 4 10.42.0.1
 
 ## References:
 
