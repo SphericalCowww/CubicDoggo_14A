@@ -154,35 +154,7 @@ Check if the domain is properly followed; do either of the following while runni
     sudo apt install bluez bluez-tools network-manager
     sudo systemctl enable --now bluetooth
     bluetoothctl show
-    
-Then create a Bluetooth PAN connection on the follower side:
 
-    nmcli --version
-    ip -br addr
-    sudo nmcli connection add type bluetooth con-name cubicggoogboi-server ifname btnap0 bluetooth.type nap ipv4.method shared ipv6.method disabled
-    sudo nmcli connection up cubicgoogboi-server
-    # sudo nmcli connection down cubicgoogboi-server                                  # if needed
-    # sudo systemctl restart NetworkManager                                        # if needed
-    # nmcli device status
-    ip -br addr
-    bluetoothctl show | grep -i "NAP"
-    # UUID: NAP                       (00001116-0000-1000-8000-00805f9b34fb)
-
-Then create a Bluetooth PAN connection on the leader side:
-
-    nmcli --version
-    ip -br addr
-    sudo nmcli connection add type bluetooth con-name cubicgoogboi-client ifname "*" bluetooth.type panu bluetooth.bdaddr 88:A2:9E:C2:0B:A0 ipv4.method auto ipv6.method disabled
-    sudo nmcli connection up cubicgoogboi-client
-    # sudo nmcli connection down cubicgoogboi-client                                  # if needed
-    # sudo systemctl restart NetworkManager                                        # if needed
-    # nmcli device status
-    ip -br addr
-    ping -c 4 10.42.0.1
-    bluetoothctl show
-    bluetoothctl info 88:A2:9E:C2:0B:A0
-    sudo sdptool browse 88:A2:9E:C2:0B:A0 | grep -i -A 10 "Network Access"         # need to find some lines
-    
 To start pairing, on the follower device,
 
     bluetoothctl
@@ -212,10 +184,59 @@ Then, on the leader device,
     ## bluetoothctl info 88:A2:9E:C2:0B:A0                       
     ## sudo journalctl -u bluetooth -n 80 --no-pager   
 
+Then create a Bluetooth PAN connection on the follower side:
+
+    nmcli --version
+    ip -br addr
+    sudo nmcli connection add type bluetooth con-name cubicggoogboi-server ifname btnap0 bluetooth.type nap ipv4.method shared ipv6.method disabled
+    sudo nmcli connection up cubicgoogboi-server
+    # sudo nmcli connection down cubicgoogboi-server                                  # if needed
+    # sudo systemctl restart NetworkManager                                        # if needed
+    # nmcli device status
+    ip -br addr
+    bluetoothctl show | grep -i "NAP"
+    # UUID: NAP                       (00001116-0000-1000-8000-00805f9b34fb)
+    sudo bt-agent -c NoInputNoOutput                   # and keep the agent on
+
+Then create a Bluetooth PAN connection on the leader side:
+
+    nmcli --version
+    ip -br addr
+    sudo nmcli connection add type bluetooth con-name cubicgoogboi-client ifname "*" bluetooth.type panu bluetooth.bdaddr 88:A2:9E:C2:0B:A0 ipv4.method auto ipv6.method disabled
+    sudo nmcli connection up cubicgoogboi-client
+    # sudo nmcli connection down cubicgoogboi-client                                  # if needed
+    # sudo systemctl restart NetworkManager                                        # if needed
+    # nmcli device status
+    ip -br addr
+    ping -c 4 10.42.0.1
+    bluetoothctl show
+    bluetoothctl info 88:A2:9E:C2:0B:A0
+    sudo sdptool browse 88:A2:9E:C2:0B:A0 | grep -i -A 10 "Network Access"         # need to find some lines
+
 To automatically start the connection, on follower device:
 
     sudo nmcli connection modify cubicgoogboi-server connection.autoconnect yes
     nmcli -f NAME,AUTOCONNECT connection show
+    sudo vim /etc/systemd/system/bluetooth-agent.service
+    # Add the following:
+    ## [Unit]
+    ## Description=Persistent Bluetooth Authorization Agent
+    ## Requires=bluetooth.service
+    ## After=bluetooth.service
+    ## 
+    ## [Service]
+    ## Type=simple
+    ## ExecStart=/usr/bin/bt-agent -c NoInputNoOutput
+    ## Restart=always
+    ## RestartSec=3
+    ## 
+    ## [Install]
+    ## WantedBy=multi-user.target
+    sudo systemctl enable bluetooth-agent.service
+    sudo systemctl daemon-reload
+    sudo systemctl restart bluetooth-agent.service
+    # systemctl status bluetooth-agent.service --no-pager    # for debugging
+    # journalctl -u bluetooth-agent.service -f
 
 And on the leader device:
 
