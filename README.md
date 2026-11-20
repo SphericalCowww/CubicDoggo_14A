@@ -205,7 +205,8 @@ Then create a Bluetooth PAN connection on the follower device as the client:
 
     nmcli --version
     ip -br addr
-    sudo nmcli connection add type bluetooth con-name cubicgoogboi-client ifname "*" bluetooth.type panu bluetooth.bdaddr 98:FE:54:75:C3:C9 ipv4.method auto ipv6.method disabled
+    # NOTE: manually assign Bluetooth PAN IP address
+    sudo nmcli connection add type bluetooth con-name cubicgoogboi-client ifname "*" bluetooth.type panu bluetooth.bdaddr 98:FE:54:75:C3:C9 ipv4.method manual ipv4.addresses 10.42.0.141/24 ipv4.gateway "" ipv6.method disabled
     sudo nmcli connection up cubicgoogboi-client
     # sudo nmcli connection down cubicgoogboi-client                                  # if needed
     # sudo nmcli connection delete cubicgoogboi-client                                # if needed
@@ -223,25 +224,46 @@ To automatically start the connection, on the leader device:
     nmcli -f NAME,AUTOCONNECT connection show
     sudo vim /etc/systemd/system/bluetooth-agent.service
     # Add the following:
-    ## [Unit]
-    ## Description=Persistent Bluetooth Authorization Agent
-    ## Requires=bluetooth.service
-    ## After=bluetooth.service
-    ## 
-    ## [Service]
-    ## Type=simple
-    ## ExecStart=/usr/bin/bt-agent -c NoInputNoOutput
-    ## Restart=always
-    ## RestartSec=3
-    ## TimeoutStopSec=5
-    ## 
-    ## [Install]
-    ## WantedBy=multi-user.target
+    ##########################################################
+    [Unit]
+    Description=Persistent Bluetooth Authorization Agent
+    Requires=bluetooth.service
+    After=bluetooth.service
+    
+    [Service]
+    Type=simple
+    ExecStart=/usr/bin/bt-agent -c NoInputNoOutput
+    Restart=always
+    RestartSec=3
+    TimeoutStopSec=5
+    
+    [Install]
+    WantedBy=multi-user.target
+    ##########################################################
     sudo systemctl enable bluetooth-agent.service
     sudo systemctl daemon-reload
     sudo systemctl restart bluetooth-agent.service
-    # systemctl status bluetooth-agent.service --no-pager    # for debugging
-    # journalctl -u bluetooth-agent.service -f
+    ## systemctl status bluetooth-agent.service --no-pager    # for debugging
+    ## journalctl -u bluetooth-agent.service -f
+    # Moreover, export the following in .bashrc for ROS2 to communicate
+    ##########################################################
+    export CYCLONEDDS_URI='
+    <CycloneDDS>
+        <Domain>
+          <General>
+            <Interfaces>
+              <NetworkInterface name="btnap0"/>
+            </Interfaces>
+            <AllowMulticast>false</AllowMulticast>
+          </General>
+          <Discovery>
+            <Peers>
+              <Peer Address="10.42.0.141"/>
+            </Peers>
+          </Discovery>
+        </Domain>
+    </CycloneDDS>'
+    ##########################################################
 
 And on the follower device:
 
