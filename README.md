@@ -149,7 +149,7 @@ Check if the domain is properly followed; do either of the following while runni
     sudo cat /proc/$(pgrep -f '/joy/joy_node' | head -n 1)/environ | tr '\0' '\n' | grep -E 'ROS_DOMAIN_ID|ROS_AUTOMATIC_DISCOVERY_RANGE'
     sudo cat /proc/$(pgrep -f '/so101_hardware/so101_leader' | head -n 1)/environ | tr '\0' '\n' | grep -E 'ROS_DOMAIN_ID|ROS_AUTOMATIC_DISCOVERY_RANGE'
 
-### Bluetooth setup
+### Bluetooth setup (WARNING: HIGH LATENCY ISSUES)
 
 On both devices,
 
@@ -283,7 +283,10 @@ And on the follower device:
     # sudo nmcli connection up cubicgoogboi-client          # if not up
     ping -c 4 10.42.0.1
 
-#### Always turn on the controller before the robot!
+Also, with this Bluetooth setup, always turn on the controller first!
+
+### Data roaming setup
+
 
 ## References:
 
