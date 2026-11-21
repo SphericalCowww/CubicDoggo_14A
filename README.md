@@ -285,9 +285,9 @@ And on the follower device:
 
 Also, with this Bluetooth setup, always turn on the controller first!
 
-### Data roaming setup
+### Data roaming setup as the working solution
 
-This is for terminal-only Raspberry Pi to connect to the data roaming on a smart phone. Note, try not doing it over ``ssh``,
+This is for a terminal-only Raspberry Pi Ubuntu installation to connect to the hotspot on a smartphone. Since it's network related, try not doing the following over ``ssh``,
 
     sudo wpa_cli -i wlan0 scan
     sleep 3
