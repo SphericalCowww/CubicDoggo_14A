@@ -153,7 +153,7 @@ Check if the domain is properly followed; do either of the following while runni
 
 On both devices,
 
-    sudo apt install bluez bluez-tools network-manager
+    sudo apt install network-manager bluez bluez-tools 
     sudo systemctl enable --now bluetooth
     bluetoothctl show
 
@@ -287,7 +287,32 @@ Also, with this Bluetooth setup, always turn on the controller first!
 
 ### Data roaming setup
 
+This is for terminal-only Raspberry Pi to connect to the data roaming on a smart phone. Note, try not doing it over ``ssh``,
 
+    sudo wpa_cli -i wlan0 scan
+    sleep 3
+    sudo wpa_cli -i wlan0 scan_results
+    sudo vim /etc/netplan/99-wifi.yaml
+    ##########################################################
+    network:
+      version: 2
+      renderer: networkd
+      wifis:
+        wlan0:
+          dhcp4: true
+          access-points:
+            "wifi_XXX":
+              password: "wifi_password_XXX"
+            "hotspot_XXX":
+              password: "hotspot_password_XXX"
+    ##########################################################
+    sudo chmod 600 /etc/netplan/99-wifi.yaml
+    sudo netplan generate
+    sudo netplan apply
+    networkctl status wlan0
+    sudo wpa_cli -i wlan0 list_networks
+    sudo wpa_cli -i wlan0 select_network 1         # for switching
+    
 ## References:
 
 - Trushant Adeshara, SO101 Arms: Calibration and Motor Configuration
