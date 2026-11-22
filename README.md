@@ -18,7 +18,7 @@ Plug the driver board into the Raspberry Pi:
 
 Install,
 
-    sudo apt install python3.12-venv libevdev-dev ffmpeg
+    sudo apt install python3.12-venv libevdev-dev libgz-cmake3-dev ffmpeg
 
 Set up the Python environment to install [LeRobot](https://github.com/huggingface/lerobot),
 
@@ -69,8 +69,8 @@ Note that although it is not needed in this setup, ``so101_ros2`` does require G
     cd CubicDoggo_14A/
     cd ..
     source CubicDoggo_14A_env/bin/activate
-    export CMAKE_PREFIX_PATH="/opt/ros/jazzy/opt/gz_msgs_vendor:$CMAKE_PREFIX_PATH"
-    export CMAKE_PREFIX_PATH="/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:$CMAKE_PREFIX_PATH"
+    export 
+    for dir in /opt/ros/jazzy/opt/gz_*_vendor; do if [ -d "$dir" ]; then export CMAKE_PREFIX_PATH="$dir:$CMAKE_PREFIX_PATH"; fi; done
     pip install catkin_pkg 
     mkdir so101_ros2
     cd so101_ros2
@@ -80,19 +80,20 @@ Note that although it is not needed in this setup, ``so101_ros2`` does require G
     sudo rosdep init
     rosdep update
     rosdep install --from-paths src --ignore-src -r -y
-    colcon build --symlink-install
-    source install/setup.bash
-
+    
 The following is for debugging on a Raspberry Pi 4 with 1 Gb of RAM
 
-    export CMAKE_PREFIX_PATH="/opt/ros/jazzy/opt/gz_msgs_vendor:$CMAKE_PREFIX_PATH"
-    export CMAKE_PREFIX_PATH="/opt/ros/jazzy/opt/gz_msgs_vendor:/opt/ros/jazzy/opt/gz_transport_vendor:$CMAKE_PREFIX_PATH"
     sudo fallocate -l 4G /swapfile
     sudo chmod 600 /swapfile
     sudo mkswap /swapfile
     sudo swapon /swapfile
     free -h                 # check if 4 Gb more RAM
     CMAKE_BUILD_PARALLEL_LEVEL=1 MAKEFLAGS="-j1" colcon build --symlink-install --executor sequential --event-handlers console_direct+ status-
+    source install/setup.bash
+
+For Raspberry Pi 5 with >4 Gb RAM:
+
+    colcon build --symlink-install --executor sequential
     source install/setup.bash
 
 Connect both driver boards and test out the calibration files, 
