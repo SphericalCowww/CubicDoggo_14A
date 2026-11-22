@@ -1,6 +1,42 @@
 # CubicDoggo 14A: Homemade 12-DOF 4-Legged Robot Recipe with 6-DOF Arm
 Cubic Doggo 14A Googboi is based on [Cubic Doggo 07B Wouf](https://github.com/SphericalCowww/CubicDoggo_07B), incorporating an [SO-101 arm](https://huggingface.co/docs/lerobot/en/so101). The robot is the simplest Cubic Doggo built for the [Tag of Flag](https://github.com/SphericalCowww/tag_of_flag) game.
 
+## Ingredients
+
+### 3D printing
+
+The 3D printer model Creality K1C is used with the OrcaSlicer, but as long as it can print PLA+. All the FreeCAD files can be found here: <a href="https://github.com/SphericalCowww/CubicDoggo_07B/tree/main/src/my_robot_description/mesh/CADv2_ST-3215-C018">link</a>.
+
+### Hardware 
+
+| device | models | count | specification |
+| - | - | - | - |
+| servo motor | Feetech <a href="https://eckstein-shop.de/feetech-st-3215-c018-servo-en">ST-3215-C018</a>, [12 at once](https://de.aliexpress.com/item/1005012684461308.html) | 18 | Max stall torque: 3.0 N*m (at 12.0V, 2.7A) and weighs 55g |
+| vitual servo motor | Feetech <a href="https://www.juxitech.com/products/feetech-serial-bus-servo-sts3215-scs0009?variant=53054355603765">STS3215-C066</a> | 6 | No torque, only for sensing |
+| driver board | <a href="https://eckstein-shop.de/WaveShare-Serial-Bus-Servo-Driver-Board-for-ST-SC-Serial-Bus-Servos-EN">servo driver</a> | 4 | Ccontrol and power the servos in daisy chain |
+| onboard computer | Raspberry Pi 5 | 1 | For running just IK, a 4GB RAM is sufficient; Pi 4 could be good enough as long as ROS2 Jazzy can be installed | 
+| controller computer | Raspberry Pi 4 | 1 | For running the SO-101 controller, a 1GB Ram with swaps is sufficient | 
+| DC-DC step-down converter | Hailege <a href="https://www.amazon.de/Hailege-Module-Step-Down-Supply-Converter/dp/B07XFMMY1F">24V/12V to 5V/5A</a> | 1 | USB Port port to RaspPi,  DC 5.5mm x 2.5mm Male to battery | 
+| battery | ZYGY <a href="https://www.amazon.de/dp/B0BB6RMM5Q">11.1V 2000mAh</a> | 2 | They already include protection. Need Charger. Need adapters for: T-plug => XT60 Male => DC 5.5mm x 2.5mm Male. Also recommend [toggle switches](https://www.amazon.de/-/en/gp/product/B0CX8TRQ35) to be soldered on the T-plugs  | 
+| power bank | INIU <a href="https://www.amazon.de/dp/B0DCYR5VNR?ref=ppx_yo2ov_dt_b_fed_asin_title">5V 45W</a> | 1 | Like any 5V power bank with > 30W would be sufficient | 
+| capacitor | 1000uF | 3 | rating 25V or higher | 
+| bearings | M3 bearing+<a href="https://www.amazon.de/dp/B01M2ZCLKX">spacer</a>, threaded rod, rod-end bearing | 8, 4, 4, 4 | rod length of 60mm to match the leg length; other dimensions can be accomodated by modifying the CAD |
+| bolts and nuts | | | M3 screws are used throughout, except where required to accommodate the servos and electronic boards; use locknuts |
+| locking washers | [M3](https://www.amazon.de/dp/B09SCQV81D) | | use in case when locknuts are not available; use it along side regular washer: 3D-printed surface => regular washer => locking washer (convex side away from the surface) => bolt |
+
+Other than the M3 screws (12mm, 16mm, 30mm), one specific requirement is the M2 self-tapping screws, specific to 10 mm length given 6mm padding, for the servos. Note that the length matters a lot; a screw 1 mm too long can already damage the servo!
+
+### Power system
+
+  * **Soldering requirement:** T-plugs are soldered to the bottom of the screw terminal of the driver boards.
+  * **Soldering recommendation:** Add a toggle switch to each of the T-plugs between the driver board and the battery because the boards don't have power switches. Search for 12V, 20A requirements for the toggle switches.
+  * Power the servo driver board with the screw terminal to handle ~16 amp current draw. Insert a 1000uF capacitor between the rail and ground with the correct polarity (shown in the right photo)
+  * Also, in the right photo, the table is covered by a fire blanket in case of electrical shortages/high current during the testing stage
+  * The ground between the 3 driver boards should be shared when they are all connected to the Rasp Pi via USB
+  * Power the RaspPi via a ~12V-to-5V DC-DC converter. Don't forget to put Kapton tape to insulate the two boards
+
+<img src="https://github.com/SphericalCowww/CubicDoggo_07B/blob/main/fig_powersystem1.png" height="400"> <img src="https://github.com/SphericalCowww/CubicDoggo_07B/blob/main/fig_powersystem2.png" height="400"> 
+
 ## Running SO-101 arms
 
 ### Initializing SO-101 with LeRobot services
