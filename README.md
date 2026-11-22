@@ -397,7 +397,7 @@ To change the servo ID and initialize the servo, connect only 1 controller and 1
     # Modify pos_offset_quick, when settled, set pos_offset_quick=0 and set pos_offset accordingly into the EEPROM
     ros2 run my_toolbox_scs_workbench scanUpdateID_zeroing
 
-Or connect all the servos with IDs listed, update all their EEPROM at once with
+Or connect all the servos with IDs listed, and update all their EEPROM at once with
 
     ros2 run my_toolbox_scs_workbench scanUpdateAll_zeroing
 
@@ -413,8 +413,6 @@ To test 2 servos with 2 controllers, or 3 servos daisy-chained, redo the connect
 
     ros2 run my_toolbox_scs_workbench testSpin_servo2controller2
     ros2 run my_toolbox_scs_workbench testSpin_servo3
-
-<img src="https://github.com/SphericalCowww/CubicDoggo_14A/blob/main/fig_servo2controller2.png" height="200"> <img src="https://github.com/SphericalCowww/CubicDoggo_14A/blob/main/fig_servo3.png" height="200">
 
 **NOTE:** Record the ``pos_offset`` for each servo independently such that each of their default position is finely aligned.
 
