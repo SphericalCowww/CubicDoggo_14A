@@ -62,6 +62,8 @@ Once everything is done,
 
 ### Running SO-101 on ROS
 
+Requirement: installing ROS2 Jazzy on a Raspberry Pi according to [GitHub](https://github.com/SphericalCowww/ROS_init_practice).
+
 Note that although it is not needed in this setup, ``so101_ros2`` does require Gazebo, so don't forget to install it,
 
     cd CubicDoggo_14A/
