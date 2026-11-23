@@ -162,6 +162,7 @@ On both devices, add,
     
     vim ~/.bashrc
     # export ROS_DOMAIN_ID=141
+    # ROS_AUTOMATIC_DISCOVERY_RANGE=SUBNET
     source ~/.bashrc
 
 Test discovery, as long as they are on the same network,
