@@ -49,7 +49,7 @@ Note that for this setup, the leader arms are assumed to use virtual servos, suc
 
 The servo IDs are 6-1 from top to bottom. Remember to always put on the PLA holder for servo 5 and connect both wires before any other part, as the wires will otherwise be extremely difficult to access afterwards. Then install the arms following [HuggingFace](https://huggingface.co/docs/lerobot/en/so101).
 
-Plug the driver board into the Raspberry Pi:
+Connect the SO-101 follower and leader each to a driver board, power them, and plug the driver board into the Raspberry Pi:
 
     sudo dmesg | tail -30
     ls -l /dev/ttyACM*                      # or whatever connection is found
@@ -91,10 +91,10 @@ Follow the calibration steps for the follower (see also [YouTube](https://www.yo
 For the leader, while 5V is completely sufficient for operation, calibration sometimes needs higher voltage,
 
     ls -l /dev/serial/by-id/
-    ## ... usb-1a86_USB_Single_Serial_5C93152513-if00 -> ../../ttyACM0
-    lerobot-setup-motors --teleop.type=so101_leader --teleop.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00
+    ## ... usb-1a86_USB_Single_Serial_5B90152131-if00 -> ../../ttyACM0
+    lerobot-setup-motors --teleop.type=so101_leader --teleop.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90152131-if00
     # ...
-    lerobot-calibrate --teleop.type=so101_leader --teleop.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 --teleop.id=my_leader
+    lerobot-calibrate --teleop.type=so101_leader --teleop.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90152131-if00 --teleop.id=my_leader
 
 Once everything is done,
 
@@ -102,16 +102,15 @@ Once everything is done,
 
 ### Running SO-101 on ROS
 
-Requirement: installing ROS2 Jazzy on a Raspberry Pi according to [GitHub](https://github.com/SphericalCowww/ROS_init_practice).
+Requirement: install ROS2 Jazzy on a Raspberry Pi according to [GitHub](https://github.com/SphericalCowww/ROS_init_practice).
 
 Note that although it is not needed in this setup, ``so101_ros2`` does require Gazebo, so don't forget to install it,
 
     cd CubicDoggo_14A/
     cd ..
     source CubicDoggo_14A_env/bin/activate
-    export 
-    for dir in /opt/ros/jazzy/opt/gz_*_vendor; do if [ -d "$dir" ]; then export CMAKE_PREFIX_PATH="$dir:$CMAKE_PREFIX_PATH"; fi; done
     pip install catkin_pkg 
+    for dir in /opt/ros/jazzy/opt/gz_*_vendor; do if [ -d "$dir" ]; then export CMAKE_PREFIX_PATH="$dir:$CMAKE_PREFIX_PATH"; fi; done
     mkdir so101_ros2
     cd so101_ros2
     git clone https://github.com/adoodevv/so101_ros2.git
@@ -139,7 +138,7 @@ For Raspberry Pi 5 with >4 Gb RAM:
 Connect both driver boards and test out the calibration files, 
 
     ros2 run so101_hardware so101_hardware_check --port /dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 --calibration ~/.cache/huggingface/lerobot/calibration/robots/so_follower/my_follower.json
-    ros2 run so101_hardware so101_hardware_check --port /dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 --calibration ~/.cache/huggingface/lerobot/calibration/teleoperators/so_leader/my_leader.json
+    ros2 run so101_hardware so101_hardware_check --port /dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90152131-if00 --calibration ~/.cache/huggingface/lerobot/calibration/teleoperators/so_leader/my_leader.json
 
 Then launch the arms,
 
@@ -148,7 +147,7 @@ Then launch the arms,
     # For powered without rViz
     ros2 launch so101_bringup so101_real_moveit.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 use_rviz:=false 
     # For teleop
-    ros2 launch so101_bringup so101_teleop.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 use_rviz:=false 
+    ros2 launch so101_bringup so101_teleop.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90152131-if00 use_rviz:=false 
 
 Note that if the arm has trouble connecting all servos, try turning down the communication to 50 Hz,
 
@@ -157,6 +156,10 @@ Note that if the arm has trouble connecting all servos, try turning down the com
     colcon build
 
 ### Running SO-101 on ROS with leader and follower on separate devices
+
+On the controller side, the following hardware connections can be made for the leader:
+
+<img src="https://github.com/SphericalCowww/CubicDoggo_14A/blob/main/fig_controller1.png" height="400"> <img src="https://github.com/SphericalCowww/CubicDoggo_14A/blob/main/fig_controller2.png" height="200"> <img src="https://github.com/SphericalCowww/CubicDoggo_14A/blob/main/fig_controller3.png" height="200"> 
 
 On both devices, add,
     
@@ -183,12 +186,12 @@ On both devices,
 Then, to run the teleoperation,
 
     # on leader device
-    ros2 launch so101_bringup so101_real_moveit_2devices.launch.py leader_only:=true leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5C93152513-if00 leader_id:=my_leader use_rviz:=false 
+    ros2 launch so101_bringup so101_real_moveit_2devices.launch.py leader_only:=true leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90152131-if00 leader_id:=my_leader use_rviz:=false 
     # on follower device
     ros2 node list
     ros2 launch so101_bringup so101_real_moveit_2devices.launch.py teleop:=true port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 follower_id:=my_follower use_rviz:=false 
 
-Check if the domain is properly followed; do either of the following while running the code:
+Check if the domain is properly set; do either of the following while running the code:
 
     sudo cat /proc/$(pgrep -f '/joy/joy_node' | head -n 1)/environ | tr '\0' '\n' | grep -E 'ROS_DOMAIN_ID|ROS_AUTOMATIC_DISCOVERY_RANGE'
     sudo cat /proc/$(pgrep -f '/so101_hardware/so101_leader' | head -n 1)/environ | tr '\0' '\n' | grep -E 'ROS_DOMAIN_ID|ROS_AUTOMATIC_DISCOVERY_RANGE'
