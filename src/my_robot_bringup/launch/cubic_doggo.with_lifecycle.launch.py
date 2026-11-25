@@ -24,6 +24,7 @@ def generate_launch_description():
     robot_state_publisher_node = Node(
         package="robot_state_publisher",
         executable="robot_state_publisher",
+        namespace="cubic_doggo",
         parameters=[{'robot_description': robot_description}],
     )
 
@@ -62,8 +63,7 @@ def generate_launch_description():
     )
     lifecycle_node = Node(
         package="my_robot_commander",
-        executable="cubic_doggo_lifecycle_perCycle",
-        #executable="cubic_doggo_lifecycle_perIter",
+        executable="cubic_doggo_lifecycle",
         parameters=[
             moveit_config.robot_description,           # the URDF math
             moveit_config.robot_description_semantic,  # the SRDF 
@@ -107,7 +107,7 @@ def generate_launch_description():
         emulate_tty=True,
         parameters=[{"power_path": "/sys/class/hwmon/hwmon3/in0_lcrit_alarm",
                      "led_path":   "/sys/class/leds/ACT/"}]
-    )    
+    )
 
     launch_entities = [
         SetParameter(name="jump_threshold", value=0.15),
@@ -116,6 +116,8 @@ def generate_launch_description():
         control_node,
         joint_state_broadcaster_spawner,
         all_legs_controller_spawner,
+        #moveit_launcher,
+        #lifecycle_node,
         GroupAction(
             actions=[
                     SetRemap(
@@ -131,6 +133,7 @@ def generate_launch_description():
         joy_driver_node,
         joy_controller_node,
         peripheral_node,
+
     ]
     
     return LaunchDescription(launch_entities)
