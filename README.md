@@ -364,19 +364,11 @@ Also, with this Bluetooth setup, always turn on the controller first!
 
 ### Testing with STServo Python library
 
-Plug in the device:
-
-    dmesg | tail -30
-    ls -l /dev/ttyACM*                      # or whatever connection is found
-    sudo usermod -aG dialout $USER
-    sudo reboot
-
-Download ``ST/SC serial bus servo control library (Python)`` from <a href="https://www.waveshare.com/wiki/Bus_Servo_Adapter_(A)">link</a>, put it under ``CubicDoggo_14A/st3215test/``.
+Download ``ST/SC serial bus servo control library (Python)`` from <a href="https://www.waveshare.com/wiki/Bus_Servo_Adapter_(A)">link</a>, put it under ``CubicDoggo_14A/st3215test/``. Plug in the drive board and connect 1 servo.
 
     cd CubicDoggo_14A/
     cd ..
     python3 -m venv CubicDoggo_14A_env
-    source CubicDoggo_14A_env/bin/activate
     cd CubicDoggo_14A/st3215test/
     unzip STServo_Python.zip
     pip install -r STServo_Python/requirements.txt
@@ -394,15 +386,19 @@ Download ``ST/SC serial bus servo control library (Linux)`` from <a href="https:
     colcon build --packages-select my_toolbox_scs_workbench --cmake-clean-first
     source install/setup.bash
 
-To change the servo ID and initialize the servo, connect only 1 controller and 1 servo,
+To change the servo ID and initialize the servos, connect only 1 driver board and 1 servo. Don't forget to power the driver board,
 
-    vim CubicDoggo_14A/src/my_toolbox_scs_workbench/src/scanUpdateID_zeroing.cpp
+    ls -l /dev/serial/by-id/                         # check if the driver board is connected; otherwise, debug
+    vim src/my_toolbox_scs_workbench/src/scanUpdateID_zeroing.cpp
     # Modify targetID, EEPROM change is only enabled when ID changes 
     # Modify pos_offset_quick, when settled, set pos_offset_quick=0 and set pos_offset accordingly into the EEPROM
+    colcon build
     ros2 run my_toolbox_scs_workbench scanUpdateID_zeroing
 
-Or connect all the servos with IDs listed, and update all their EEPROM at once with
+Set the servo ID one by one; go to the next only after the servo stops turning during the initialization. Then connect all the servos with IDs listed, and update offset values (only do so after the legs are assembled),
 
+    vim src/my_toolbox_scs_workbench/src/scanUpdateAll_zeroing.cpp
+    # Modify the ID list
     ros2 run my_toolbox_scs_workbench scanUpdateAll_zeroing
 
 **WARNING: DO NOT CTRL-C FOR THESE EEPROM PROCESSES**
