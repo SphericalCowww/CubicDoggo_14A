@@ -67,7 +67,6 @@ Set up the Python environment to install [LeRobot](https://github.com/huggingfac
     python3 -m venv CubicDoggo_14A_env
     source CubicDoggo_14A_env/bin/activate
     pip install --upgrade pip jinja2 pyyaml typeguard setuptools wheel
-    pip install catkin_pkg lark empy==3.3.4
 
 Then clone the repository:
     
@@ -113,7 +112,11 @@ Note that although it is not needed in this setup, ``so101_ros2`` does require G
     cd CubicDoggo_14A/
     cd ..
     source CubicDoggo_14A_env/bin/activate
+    pip install catkin_pkg lark empy==3.3.4
     for dir in /opt/ros/jazzy/opt/gz_*_vendor; do if [ -d "$dir" ]; then export CMAKE_PREFIX_PATH="$dir:$CMAKE_PREFIX_PATH"; fi; done
+
+Then clone the repository,
+
     mkdir so101_ros2
     cd so101_ros2
     git clone https://github.com/adoodevv/so101_ros2.git
