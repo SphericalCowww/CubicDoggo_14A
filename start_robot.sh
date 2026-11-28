@@ -14,6 +14,7 @@ ros2 launch my_robot_bringup cubic_doggo.with_lifecycle.launch.py &
 DOGGO_PID=$!
 wait
 
+# For the controller with the SO-101 leader
 # exec ros2 launch so101_bringup so101_real_moveit_2devices.launch.py leader_only:=true leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90152131-if00 leader_id:=my_leader use_rviz:=false 
 
 

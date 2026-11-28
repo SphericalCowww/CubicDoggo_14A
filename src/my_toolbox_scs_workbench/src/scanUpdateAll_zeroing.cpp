@@ -10,13 +10,13 @@ int main() {
 
     const char* port_name = "/dev/ttyACM0";
     //u8  servoIDs   [3] = {11, 12, 13};
-    //s16 pos_offsets[3] = {-110, -150, 50};
+    //s16 pos_offsets[3] = {-20, 40, -10};
     //u8  servoIDs   [3] = {21, 22, 23};
-    //s16 pos_offsets[3] = {-60, 0, 30};
+    //s16 pos_offsets[3] = {40, -40, -30};
     //u8  servoIDs   [3] = {31, 32, 33};
-    //s16 pos_offsets[3] = {0, 70, 30};
+    //s16 pos_offsets[3] = {0, 30, 0};
     u8  servoIDs   [3] = {41, 42, 43};
-    s16 pos_offsets[3] = {20, 20, -30};
+    s16 pos_offsets[3] = {20, -40, -50};
     /////////////////////////////////////////////////////////////////
     SMS_STS sts_wb;
     if(!sts_wb.begin(baud_rate, port_name)){
