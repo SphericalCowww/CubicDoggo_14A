@@ -74,18 +74,20 @@ Set up the Python environment to install [LeRobot](https://github.com/huggingfac
 
 Follow the calibration steps for the follower (see also [YouTube](https://www.youtube.com/watch?v=Nhfda8h7e2I)),
 
+
+
     # plug in the driver board
     lerobot-find-port
     # unplug the driver board
     ## The port of this MotorsBus is '/dev/ttyACM0'
     # plug in the driver board
     ls -l /dev/serial/by-id/
-    ## ... usb-1a86_USB_Single_Serial_5B8E112477-if00 -> ../../ttyACM0
-    lerobot-setup-motors --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00
+    ## ... usb-1a86_USB_Single_Serial_5B90149349-if00 -> ../../ttyACM0
+    lerobot-setup-motors --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90149349-if00
     # Connecting the servos from top to bottom independently to the driver board one-by-one, following the instructions
     ## ... 'shoulder_pan' motor id set to 1
     # After completion, connect all servos in a daisy chain 
-    lerobot-calibrate --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 --robot.id=my_follower
+    lerobot-calibrate --robot.type=so101_follower --robot.port=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90149349-if00 --robot.id=my_follower
     # Follow the instructions
 
 For the leader, while 5V is completely sufficient for operation, calibration sometimes needs higher voltage,
@@ -137,17 +139,17 @@ For Raspberry Pi 5 with >4 Gb RAM:
 
 Connect both driver boards and test out the calibration files, 
 
-    ros2 run so101_hardware so101_hardware_check --port /dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 --calibration ~/.cache/huggingface/lerobot/calibration/robots/so_follower/my_follower.json
+    ros2 run so101_hardware so101_hardware_check --port /dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90149349-if00 --calibration ~/.cache/huggingface/lerobot/calibration/robots/so_follower/my_follower.json
     ros2 run so101_hardware so101_hardware_check --port /dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90152131-if00 --calibration ~/.cache/huggingface/lerobot/calibration/teleoperators/so_leader/my_leader.json
 
 Then launch the arms,
 
     # For no torque with rViz
-    ros2 launch so101_bringup so101_real_moveit.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 read_only:=true
+    ros2 launch so101_bringup so101_real_moveit.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90149349-if00 read_only:=true
     # For powered without rViz
-    ros2 launch so101_bringup so101_real_moveit.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 use_rviz:=false 
+    ros2 launch so101_bringup so101_real_moveit.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90149349-if00 use_rviz:=false 
     # For teleop
-    ros2 launch so101_bringup so101_teleop.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90152131-if00 use_rviz:=false 
+    ros2 launch so101_bringup so101_teleop.launch.py port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90149349-if00 leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90152131-if00 use_rviz:=false 
 
 Note that if the arm has trouble connecting all servos, try turning down the communication to 50 Hz,
 
@@ -189,7 +191,7 @@ Then, to run the teleoperation,
     ros2 launch so101_bringup so101_real_moveit_2devices.launch.py leader_only:=true leader_port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90152131-if00 leader_id:=my_leader use_rviz:=false 
     # on follower device
     ros2 node list
-    ros2 launch so101_bringup so101_real_moveit_2devices.launch.py teleop:=true port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B8E112477-if00 follower_id:=my_follower use_rviz:=false 
+    ros2 launch so101_bringup so101_real_moveit_2devices.launch.py teleop:=true port:=/dev/serial/by-id/usb-1a86_USB_Single_Serial_5B90149349-if00 follower_id:=my_follower use_rviz:=false 
 
 Check if the domain is properly set; do either of the following while running the code:
 
