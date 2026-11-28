@@ -67,14 +67,16 @@ Set up the Python environment to install [LeRobot](https://github.com/huggingfac
     python3 -m venv CubicDoggo_14A_env
     source CubicDoggo_14A_env/bin/activate
     pip install --upgrade pip jinja2 pyyaml typeguard setuptools wheel
+    pip install catkin_pkg lark empy==3.3.4
+
+Then clone the repository:
+    
     git clone https://github.com/huggingface/lerobot.git
     cd lerobot
     pip install -e .
     pip install -e ".[feetech]"
 
 Follow the calibration steps for the follower (see also [YouTube](https://www.youtube.com/watch?v=Nhfda8h7e2I)),
-
-
 
     # plug in the driver board
     lerobot-find-port
@@ -111,7 +113,6 @@ Note that although it is not needed in this setup, ``so101_ros2`` does require G
     cd CubicDoggo_14A/
     cd ..
     source CubicDoggo_14A_env/bin/activate
-    pip install catkin_pkg 
     for dir in /opt/ros/jazzy/opt/gz_*_vendor; do if [ -d "$dir" ]; then export CMAKE_PREFIX_PATH="$dir:$CMAKE_PREFIX_PATH"; fi; done
     mkdir so101_ros2
     cd so101_ros2
@@ -369,8 +370,6 @@ Also, with this Bluetooth setup, always turn on the controller first!
 Download ``ST/SC serial bus servo control library (Python)`` from <a href="https://www.waveshare.com/wiki/Bus_Servo_Adapter_(A)">link</a>, put it under ``CubicDoggo_14A/st3215test/``. Plug in the drive board and connect 1 servo.
 
     cd CubicDoggo_14A/
-    cd ..
-    python3 -m venv CubicDoggo_14A_env
     cd CubicDoggo_14A/st3215test/
     unzip STServo_Python.zip
     pip install -r STServo_Python/requirements.txt
